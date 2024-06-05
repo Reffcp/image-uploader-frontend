@@ -16,17 +16,43 @@
       <v-icon color="error" icon="mdi-fire-circle" size="small"></v-icon>
     </v-card-subtitle>
   </v-card-item>
-  <v-img @click="clickToInputFile" height="250" src="img/img-demo.svg" contain></v-img>
+  <v-img id="img-cursor" @click="clickToInputFile" height="250" :src="imgSelected" contain></v-img>
+  <div v-if="urlImgNew != ''">
+    <br />
+    <v-text-field disabled label="Link" variant="outlined" v-model="urlImgNew"></v-text-field>
+  </div>
   <v-file-input
     ref="fileInput"
     v-model="file"
-    :rules="rules"
-    accept="image/png, image/jpeg, image/bmp"
+    accept="image/png, image/jpeg, image/bmp, image/webp"
     style="display: none"
   ></v-file-input>
+
   <v-divider class="mx-4 mb-1"></v-divider>
 
   <v-card-actions>
-    <v-btn color="deep-purple-lighten-2" @click="uploadFile" text="Upload" block></v-btn>
+    <v-btn
+      v-if="urlImgNew == ''"
+      :disabled="!enabledUpload"
+      color="deep-purple-lighten-2"
+      @click="uploadFile"
+      text="Subir"
+      block
+    ></v-btn>
+    <v-btn
+      v-if="urlImgNew != ''"
+      color="deep-purple-lighten-2"
+      @click="copyToClipboard"
+      text="Copiar link"
+      block
+    ></v-btn>
   </v-card-actions>
 </v-card>
+
+<v-snackbar v-model="snackbar" :timeout="timeout">
+  {{ textSnackbar }}
+
+  <template v-slot:actions>
+    <v-btn color="blue" variant="text" @click="snackbar = false"> Cerrar </v-btn>
+  </template>
+</v-snackbar>
