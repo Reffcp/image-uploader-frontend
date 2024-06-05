@@ -5,8 +5,7 @@ import 'vuetify/styles' // Importa los estilos de Vuetify
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
-import { createRouter, createWebHistory } from 'vue-router'
-import routes from './router/routes'
+import router from './router/routes'
 
 // Crea una instancia de Vuetify
 const vuetify = createVuetify({
@@ -21,11 +20,10 @@ const vuetify = createVuetify({
   }
 })
 
-// Crea una instancia del router
-const router = createRouter({
-  history: createWebHistory(),
-  routes
-})
+const app = createApp(App)
 
-// Crea la aplicación Vue y usa Vuetify y el router
-createApp(App).use(vuetify).use(router).mount('#app')
+app.use(router)
+
+app.use(vuetify)
+
+app.mount('#app')

@@ -1,5 +1,14 @@
-import type { RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
-const routes: RouteRecordRaw[] = []
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: '/',
+      name: 'HomeView',
+      component: () => import('../views/HomeView.vue')
+    }
+  ]
+})
 
-export default routes
+export default router
