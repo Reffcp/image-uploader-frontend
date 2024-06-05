@@ -1,5 +1,21 @@
-<script setup lang="ts"></script>
+<template>
+  <v-app>
+    <v-main>
+      <v-container>
+        <router-view></router-view>
+      </v-container>
+    </v-main>
+  </v-app>
+</template>
 
-<template>Hola mundo</template>
+<script lang="ts">
+import { defineComponent } from 'vue'
 
-<style scoped></style>
+export default defineComponent({
+  name: 'App'
+})
+</script>
+
+<style>
+/* Puedes agregar estilos globales o específicos aquí si es necesario */
+</style>
