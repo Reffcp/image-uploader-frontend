@@ -1,4 +1,6 @@
 import { defineComponent, onMounted, ref } from 'vue'
+import axios from 'axios'
+import FormData from 'form-data'
 
 const UploadImageComponent = defineComponent({
   name: 'UploadImageComponent',
@@ -17,9 +19,22 @@ const UploadImageComponent = defineComponent({
       imgSelected.value = 'img/img-demo.svg'
     })
 
-    const reserve = () => {
+    const upload = () => {
       loading.value = true
-      setTimeout(() => (loading.value = false), 2000)
+      const form = new FormData()
+      form.append('image', file.value as File)
+
+      axios
+        .post(import.meta.env.VITE_API_URL + 'image/upload', form)
+        .then((response) => {
+          loading.value = false
+          urlImgNew.value = response.data.body.url
+          enabledUpload.value = false
+        })
+        .catch((error) => {
+          loading.value = false
+          console.error('Error uploading image:', error)
+        })
     }
 
     const clickToInputFile = () => {
@@ -29,7 +44,7 @@ const UploadImageComponent = defineComponent({
           if (fileInput.value?.files) {
             //primero validamos que pese menos de 2MB
             const size = fileInput.value.files[0].size
-            if (size > 2000000) {
+            if (size > import.meta.env.VITE_MAX_SIZE_FILE) {
               urlImgNew.value = ''
               fileInput.value.value = '' // Reset the input file
               enabledUpload.value = false
@@ -48,19 +63,6 @@ const UploadImageComponent = defineComponent({
       }
     }
 
-    // funcion uploadFile para simular la subida de un archivo
-    const uploadFile = async () => {
-      if (file.value) {
-        loading.value = true
-
-        setTimeout(() => {
-          loading.value = false
-          enabledUpload.value = false
-          urlImgNew.value = imgSelected.value
-        }, 2000)
-      }
-    }
-
     const copyToClipboard = () => {
       const el = document.createElement('textarea')
       el.value = urlImgNew.value
@@ -76,9 +78,8 @@ const UploadImageComponent = defineComponent({
       fileInput,
       loading,
       file,
-      reserve,
+      upload,
       clickToInputFile,
-      uploadFile,
       imgSelected,
       enabledUpload,
       urlImgNew,

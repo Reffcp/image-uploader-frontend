@@ -29,3 +29,4 @@ coverage
 .vite
 *.tsbuildinfo
 package-lock.json
+.env
