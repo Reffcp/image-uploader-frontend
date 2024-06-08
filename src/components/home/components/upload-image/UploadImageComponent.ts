@@ -1,6 +1,7 @@
 import { defineComponent, onMounted, ref } from 'vue'
-import axios from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 import FormData from 'form-data'
+import type ApiResponseBaseInterface from '@/shared/interfaces/api-base.interface'
 
 const UploadImageComponent = defineComponent({
   name: 'UploadImageComponent',
@@ -26,9 +27,9 @@ const UploadImageComponent = defineComponent({
 
       axios
         .post(import.meta.env.VITE_API_URL + 'image/upload', form)
-        .then((response) => {
+        .then((response: AxiosResponse<ApiResponseBaseInterface>) => {
           loading.value = false
-          urlImgNew.value = response.data.body.url
+          urlImgNew.value = response.data.body.imagen_url
           enabledUpload.value = false
         })
         .catch((error) => {
