@@ -6,7 +6,7 @@ import type { AxiosResponse } from 'axios'
 
 const UploadImageComponent = defineComponent({
   name: 'UploadImageComponent',
-  setup() {
+  setup(_, { emit }) {
     const fileInput = ref<HTMLInputElement | null>(null)
     const loading = ref(false)
     const file = ref(null) as any
@@ -21,6 +21,20 @@ const UploadImageComponent = defineComponent({
       imgSelected.value = 'img/img-demo.svg'
     })
 
+    const reset = () => {
+      imgSelected.value = 'img/img-demo.svg'
+      enabledUpload.value = false
+      urlImgNew.value = ''
+      file.value = null
+    }
+
+    const notifyParent = () => {
+      emit('notify')
+      setTimeout(() => {
+        reset()
+      }, 5000)
+    }
+
     const upload = () => {
       loading.value = true
       const form = new FormData()
@@ -32,6 +46,7 @@ const UploadImageComponent = defineComponent({
           loading.value = false
           urlImgNew.value = response.data.body.imagen_url
           enabledUpload.value = false
+          notifyParent()
         })
         .catch((error) => {
           loading.value = false
