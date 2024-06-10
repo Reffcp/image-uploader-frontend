@@ -7,8 +7,7 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import router from './router/routes'
 import './assets/main.scss'
-import '@mdi/font/css/materialdesignicons.css';
-
+import '@mdi/font/css/materialdesignicons.css'
 
 // Crea una instancia de Vuetify
 const vuetify = createVuetify({
@@ -20,6 +19,9 @@ const vuetify = createVuetify({
     sets: {
       mdi
     }
+  },
+  theme: {
+    defaultTheme: 'dark'
   }
 })
 
