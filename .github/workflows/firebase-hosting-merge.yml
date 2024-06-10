@@ -10,24 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Clonar el repositorio
       - name: Check out the repository
         uses: actions/checkout@v4
 
+      # Configurar Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20.13.1'
 
+      # Instalar dependencias del proyecto
       - name: Install dependencies
         run: npm install
 
-      - name: Set environment variables
+      # Crear el archivo .env.production con los secretos configurados
+      - name: Create .env.production file
         run: |
-          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> $GITHUB_ENV
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> .env.production
+          echo "VITE_MAX_SIZE_FILE=${{ secrets.VITE_MAX_SIZE_FILE }}" >> .env.production
 
+      # Construir el proyecto
       - name: Build the project
+        env:
+          NODE_ENV: production  # Asegurarse de que el entorno sea producción
         run: npm run build
 
+      # Desplegar en Firebase Hosting
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:

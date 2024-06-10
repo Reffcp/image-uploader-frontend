@@ -1,55 +1,65 @@
 <v-card class="mx-auto" max-width="344">
-    <v-img height="180px" src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" cover></v-img>
-  
-    <v-card-actions>
-      <v-btn color="orange-lighten-2" text="Copiar URL"></v-btn>
-  
-      <v-spacer></v-spacer>
-  
-      <v-btn :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'" @click="show = !show"></v-btn>
-    </v-card-actions>
-  
-    <v-expand-transition>
-      <div v-show="show">
-        <v-divider></v-divider>
-  
-        <v-card-text>
-          <v-list density="compact">
-            <v-list-subheader>Detalles</v-list-subheader>
-  
-            <v-list-item value="item" color="primary">
-              <template v-slot:prepend>
-                <v-icon icon="mdi-upload"></v-icon>
-              </template>
-  
-              <v-list-item-title> 20 de septiembre de 2021 </v-list-item-title>
-            </v-list-item>
-  
-            <v-list-item value="item" color="primary">
-              <template v-slot:prepend>
-                <v-icon icon="mdi-ip"></v-icon>
-              </template>
-  
-              <v-list-item-title> 192.168.1.254 </v-list-item-title>
-            </v-list-item>
-  
-            <v-list-item value="item" color="primary">
-              <template v-slot:prepend>
-                <v-icon icon="mdi-harddisk"></v-icon>
-              </template>
-  
-              <v-list-item-title> 250Kb </v-list-item-title>
-            </v-list-item>
-  
-            <v-list-item value="item" color="primary">
-              <template v-slot:prepend>
-                <v-icon icon="mdi-delete-clock"></v-icon>
-              </template>
-  
-              <v-list-item-title> 22 de octubre de 2021 </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-card-text>
-      </div>
-    </v-expand-transition>
-  </v-card>
+  <v-img height="180px" :src="dataImage.imagen_url" cover></v-img>
+
+  <v-card-actions>
+    <v-btn color="orange-lighten-2" text="Copiar URL" @click="copyToClipboard"></v-btn>
+
+    <v-spacer></v-spacer>
+
+    <v-btn :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'" @click="show = !show"></v-btn>
+  </v-card-actions>
+
+  <v-expand-transition>
+    <div v-show="show">
+      <v-divider></v-divider>
+
+      <v-card-text>
+        <v-list density="compact">
+          <v-list-subheader>Detalles</v-list-subheader>
+
+          <v-list-item value="item" color="primary">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-upload"></v-icon>
+            </template>
+
+            <v-list-item-title> {{convertDate(dataImage.fecha_hora_creacion)}} </v-list-item-title>
+          </v-list-item>
+
+          <v-list-item value="item" color="primary">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-ip"></v-icon>
+            </template>
+
+            <v-list-item-title> {{dataImage.ip_origen}} </v-list-item-title>
+          </v-list-item>
+
+          <v-list-item value="item" color="primary">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-harddisk"></v-icon>
+            </template>
+
+            <v-list-item-title>
+              {{convertToKylobytesOrMegabytes( dataImage.imagen_tamanio)}}
+            </v-list-item-title>
+          </v-list-item>
+
+          <v-list-item value="item" color="primary">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-delete-clock"></v-icon>
+            </template>
+
+            <v-list-item-title> {{convertDate(dataImage.fecha_hora_borrar)}} </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-card-text>
+    </div>
+  </v-expand-transition>
+</v-card>
+
+<v-snackbar v-model="snackbar" :timeout="timeout">
+  {{ textSnackbar }}
+
+  <template v-slot:actions>
+    <v-btn color="blue" variant="text" @click="snackbar = false"> Cerrar </v-btn>
+  </template>
+</v-snackbar>
